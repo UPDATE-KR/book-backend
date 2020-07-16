@@ -1,5 +1,8 @@
 const ApiErrorCode = {
 
+    // AUTH
+    UNAUTHORIZED: { status: 401, code: 'api.error.unauthorized', msg: '로그인이 필요합니다.' },
+
     // USER
     ALREADY_EXISTS_USER: { status: 400, code: 'api.error.already_exists_user', msg: '이미 존재하는 유저입니다.' },
 

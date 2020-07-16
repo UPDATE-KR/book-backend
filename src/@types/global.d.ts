@@ -1,12 +1,6 @@
-type ApiResponse = SuccessResponse | ErrorResponse;
-
-interface SuccessResponse {
+type ApiResponse = {
     result?: number;
-    data?: any
-}
-
-interface ErrorResponse {
-    result?: number;
+    data?: any;
     resultCode?: string;
     resultMsg?: string;
 }

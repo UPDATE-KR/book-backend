@@ -4,14 +4,15 @@ import Prisma from '../core/database/prisma';
 import { ApiException } from 'src/common/exception/ApiException';
 import ApiErrorCode from 'src/common/exception/ApiErrorCode';
 import { SignUpDto } from './dto/signup.dto';
-import { validate } from 'class-validator';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { User } from 'src/models';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthsService {
     constructor(
-        private readonly prisma: Prisma
+        private readonly prisma: Prisma,
+        private readonly jwtService: JwtService
     ) {}
 
     async doLogin(req: LoginDto) {
@@ -25,8 +26,12 @@ export class AuthsService {
             throw new ApiException(ApiErrorCode.BAD_REQUEST);
         }
 
+        const { id, email } = User.of(auth);
         return {
-            user: User.of(auth)
+            access_token: this.jwtService.sign({
+                id,
+                email
+            })
         };
     }
 
@@ -60,6 +65,14 @@ export class AuthsService {
         return {
             msg: "success"
         };
+    }
+
+    async validateUser(payload: { id: number; email: string }) {
+        return await this.prisma.auth.findOne({
+            where: {
+                id: payload.id
+            }
+        });
     }
 
 }
