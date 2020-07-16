@@ -3,7 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
-import { CustomExceptionFilter } from './custom-exception.filter';
+import { ApiExceptionFilter, BadRequestExceptionFilter } from './core/filter';
+import { ValidationPipe } from '@nestjs/common';
 config();
 
 async function bootstrap() {
@@ -12,7 +13,9 @@ async function bootstrap() {
     , new FastifyAdapter()
     );
     
-  app.useGlobalFilters(new CustomExceptionFilter());
+  app.setGlobalPrefix('api');
+  app.useGlobalFilters(new ApiExceptionFilter(), new BadRequestExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe())
     
   await app.listen(3000);
 }
