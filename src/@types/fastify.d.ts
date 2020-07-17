@@ -1,4 +1,4 @@
-import { User } from 'src/models';
+import { User } from '@prisma/client';
 
 declare module 'fastify' {
   interface FastifyRequest {

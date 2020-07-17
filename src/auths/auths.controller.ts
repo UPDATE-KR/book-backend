@@ -1,18 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Res,
-  Get,
-  UseGuards,
-  Logger,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { AuthsService } from './auths.service';
-import { ApiException } from 'src/common/exception/ApiException';
-import ApiErrorCode from 'src/common/exception/ApiErrorCode';
 import { SignUpDto } from './dto/signup.dto';
-import { JwtAuthGuard } from 'src/core/authentication/jwt-auth.guard';
 
 @Controller('auths')
 export class AuthsController {

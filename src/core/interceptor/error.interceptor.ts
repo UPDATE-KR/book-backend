@@ -5,6 +5,7 @@ import {
   CallHandler,
   BadRequestException,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,7 +14,7 @@ import ApiErrorCode from 'src/common/exception/ApiErrorCode';
 
 @Injectable()
 export class ErrorInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError(err => {
         if (

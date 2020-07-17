@@ -15,6 +15,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { LogginInterceptor } from './core/interceptor/logging.interceptor';
 import { TransformInterceptor } from './core/interceptor/transform.interceptor';
 import { ErrorInterceptor } from './core/interceptor/error.interceptor';
+import { ConfigService } from '@nestjs/config';
+import { AuthsService } from './auths/auths.service';
 config();
 
 async function bootstrap() {
@@ -30,7 +32,7 @@ async function bootstrap() {
     new UnauthorizedExceptionFilter(),
   );
   app.useGlobalInterceptors(
-    new LogginInterceptor(),
+    new LogginInterceptor(app.get(ConfigService), app.get(AuthsService)),
     new TransformInterceptor(),
     new ErrorInterceptor(),
   );
