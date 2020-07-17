@@ -11,23 +11,7 @@ export class UsersController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async readMyInfo(@Request() { user }: FastifyRequest): Promise<ApiResponse> {
-    const returnMap: ApiResponse = {};
-
-    try {
-      returnMap['result'] = 1;
-      returnMap['data'] = await this.userService.readMyInfo(user);
-    } catch (e) {
-      returnMap['result'] = 0;
-      if (e instanceof ApiException) {
-        returnMap['resultCode'] = e.code;
-        returnMap['resultMsg'] = e.msg;
-      } else {
-        returnMap['resultCode'] = ApiErrorCode.UNKNOWN.code;
-        returnMap['resultMsg'] = ApiErrorCode.UNKNOWN.msg;
-      }
-    }
-
-    return returnMap;
+  async readMyInfo(@Request() { user }: FastifyRequest) {
+    return await this.userService.readMyInfo(user);
   }
 }
