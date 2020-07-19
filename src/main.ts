@@ -1,4 +1,3 @@
-import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -17,7 +16,6 @@ import { TransformInterceptor } from './core/interceptor/transform.interceptor';
 import { ErrorInterceptor } from './core/interceptor/error.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { AuthsService } from './auths/auths.service';
-config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

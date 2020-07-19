@@ -13,6 +13,11 @@ export class BooksService {
 
     const pagination = new Pagination(page);
     returnMap['list'] = await this.prisma.book.findMany({
+      select: {
+        id: true,
+        title: true,
+        user: true,
+      },
       take: pagination.limit,
       skip: pagination.offset,
     });

@@ -40,9 +40,9 @@ export class LogginInterceptor implements NestInterceptor {
         'request.deep',
       );
 
-      if (HEADERS['authorization']) {
+      if (request.user) {
         this.logger.debug(
-          `Requested by (${HEADERS['authorization']})`,
+          `Requested by (${request.user.id}/${request.user.email}/${request.user.username})`,
           'request.deep',
         );
       }

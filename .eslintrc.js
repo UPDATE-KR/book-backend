@@ -10,7 +10,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'prettier/@typescript-eslint',
-    'airbnb'
+    'airbnb',
   ],
   root: true,
   env: {
