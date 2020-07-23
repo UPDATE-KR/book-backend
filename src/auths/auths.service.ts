@@ -82,6 +82,14 @@ export class AuthsService {
 
   async validateUser(payload: { id: number; email: string }) {
     return await this.prisma.user.findOne({
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        nickname: true,
+        createdAt: true,
+        updatedAt: false,
+      },
       where: {
         id: payload.id,
       },

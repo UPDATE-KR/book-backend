@@ -35,21 +35,27 @@ model User {
 
   auth Auth   @relation(references: [id], fields: [id])
   Book Book[]
+  Note Note[]
 }
 
 model Book {
-  id     Int    @default(autoincrement()) @id
-  title  String
-  user   User   @relation(references: [id], fields: [userId])
-  userId Int
-  notes  Note[]
+  id      Int     @default(autoincrement()) @id
+  title   String
+  user    User    @relation(references: [id], fields: [userId])
+  userId  Int
+  private Boolean @default(false)
+  notes   Note[]
 }
 
 model Note {
   id        Int      @default(autoincrement()) @id
-  book      Book     @relation(fields: [bookId], references: [id])
-  bookId    Int
+  userId    Int
+  bookId    Int?
   contents  String
+  private   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  book Book? @relation(fields: [bookId], references: [id])
+  user User  @relation(references: [id], fields: [userId])
 }

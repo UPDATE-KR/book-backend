@@ -1,6 +1,6 @@
-# Migration `20200717215556`
+# Migration `20200723235132`
 
-This migration has been generated at 7/17/2020, 9:55:56 PM.
+This migration has been generated at 7/23/2020, 11:51:32 PM.
 You can check out the [state of the schema](./schema.prisma) after the migration.
 
 ## Database Steps
@@ -28,17 +28,20 @@ CREATE TABLE `book`.`User` (
 
 CREATE TABLE `book`.`Book` (
 `id` int NOT NULL  AUTO_INCREMENT,
+`private` boolean NOT NULL DEFAULT false ,
 `title` varchar(191) NOT NULL  ,
 `userId` int NOT NULL ,
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 
 CREATE TABLE `book`.`Note` (
-`bookId` int NOT NULL ,
+`bookId` int  ,
 `contents` varchar(191) NOT NULL  ,
 `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 `id` int NOT NULL  AUTO_INCREMENT,
+`private` boolean NOT NULL DEFAULT false ,
 `updatedAt` datetime(3) NOT NULL  ,
+`userId` int NOT NULL ,
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 
@@ -50,17 +53,19 @@ ALTER TABLE `book`.`User` ADD FOREIGN KEY (`id`) REFERENCES `book`.`Auth`(`id`) 
 
 ALTER TABLE `book`.`Book` ADD FOREIGN KEY (`userId`) REFERENCES `book`.`User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-ALTER TABLE `book`.`Note` ADD FOREIGN KEY (`bookId`) REFERENCES `book`.`Book`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+ALTER TABLE `book`.`Note` ADD FOREIGN KEY (`bookId`) REFERENCES `book`.`Book`(`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
+ALTER TABLE `book`.`Note` ADD FOREIGN KEY (`userId`) REFERENCES `book`.`User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ```
 
 ## Changes
 
 ```diff
 diff --git schema.prisma schema.prisma
-migration ..20200717215556
+migration ..20200723235132
 --- datamodel.dml
 +++ datamodel.dml
-@@ -1,0 +1,55 @@
+@@ -1,0 +1,61 @@
 +// pretier-ignore-start
 +// This is your Prisma schema file,
 +// learn more about it in the docs: https://pris.ly/d/prisma-schema
@@ -98,23 +103,29 @@ migration ..20200717215556
 +
 +  auth Auth   @relation(references: [id], fields: [id])
 +  Book Book[]
++  Note Note[]
 +}
 +
 +model Book {
-+  id     Int    @default(autoincrement()) @id
-+  title  String
-+  user   User   @relation(references: [id], fields: [userId])
-+  userId Int
-+  notes  Note[]
++  id      Int     @default(autoincrement()) @id
++  title   String
++  user    User    @relation(references: [id], fields: [userId])
++  userId  Int
++  private Boolean @default(false)
++  notes   Note[]
 +}
 +
 +model Note {
 +  id        Int      @default(autoincrement()) @id
-+  book      Book     @relation(fields: [bookId], references: [id])
-+  bookId    Int
++  userId    Int
++  bookId    Int?
 +  contents  String
++  private   Boolean  @default(false)
 +  createdAt DateTime @default(now())
 +  updatedAt DateTime @updatedAt
++
++  book Book? @relation(fields: [bookId], references: [id])
++  user User  @relation(references: [id], fields: [userId])
 +}
 ```
 
